@@ -1,0 +1,2 @@
+#!/bin/sh
+git --work-tree=/home/patrick/mydocker/dockerfactory/laravel --git-dir=/home/patrick/patrick_folder/repo/site.git checkout -f

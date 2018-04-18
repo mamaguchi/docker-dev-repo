@@ -1,0 +1,15 @@
+patrick@patrick-ubuntu-server:~/mydocker$ docker pull php:7.2.4-fpm-alpine3.7
+7.2.4-fpm-alpine3.7: Pulling from library/php
+ff3a5c916c92: Already exists 
+2ca736d3a2d3: Pull complete 
+ed01bffbd8ba: Pull complete 
+86a241b7142f: Pull complete 
+56f95148da98: Pull complete 
+e8c1fe1a8973: Pull complete 
+d26864be7adf: Pull complete 
+9c0470d0b31b: Pull complete 
+7d8dac5c7d29: Pull complete 
+e3060346a42e: Pull complete 
+5219ae064cb5: Pull complete 
+Digest: sha256:ab595c9e06f5051ceb4a0f6945319462212093e4b86e6f5d73b5286f1e8ebe43
+Status: Downloaded newer image for php:7.2.4-fpm-alpine3.7

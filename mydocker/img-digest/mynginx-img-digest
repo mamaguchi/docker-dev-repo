@@ -1,0 +1,9 @@
+patrick@patrick-ubuntu-server:~/mydocker$ docker pull nginx:1.13-alpine
+1.13-alpine: Pulling from library/nginx
+ff3a5c916c92: Pull complete 
+f9c32daa8fe9: Pull complete 
+655cd391f0aa: Pull complete 
+64b82947328a: Pull complete 
+Digest: sha256:e0f3f5ebde753fa44b5fcdc771fc89f117ee8b2bbcece1c1bdf35f2de4da4e0b
+Status: Downloaded newer image for nginx:1.13-alpine
+

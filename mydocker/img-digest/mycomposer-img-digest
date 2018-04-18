@@ -1,0 +1,19 @@
+patrick@patrick-ubuntu-server:~/mydocker$ docker pull composer:1.6
+1.6: Pulling from library/composer
+605ce1bd3f31: Pull complete 
+2f5aa494661d: Pull complete 
+7963c90c835a: Pull complete 
+a3f2a1640434: Pull complete 
+5aa4b61e4660: Pull complete 
+58bcfa11e75f: Pull complete 
+63883b03d3c9: Pull complete 
+615a860d1cfd: Pull complete 
+6b5ae3985be8: Pull complete 
+1849f56407f4: Pull complete 
+8ebd0294d5f2: Pull complete 
+c16b13d04fd4: Pull complete 
+b6a159e452de: Pull complete 
+e75ffa040e38: Pull complete 
+734c6f6a95d0: Pull complete 
+Digest: sha256:ba61625e454f27ac77813e94c658aff0b5aa0d53f6b10948d66124440a809b26
+Status: Downloaded newer image for composer:1.6

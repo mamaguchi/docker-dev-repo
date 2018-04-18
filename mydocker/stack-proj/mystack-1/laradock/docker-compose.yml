@@ -1,0 +1,149 @@
+version: '3'
+
+networks:
+  frontend:
+    #driver: ${NETWORKS_DRIVER}
+    driver: overlay
+  backend:
+    #driver: ${NETWORKS_DRIVER}
+    driver: overlay
+
+#volumes:
+#  mysql:
+#    #driver: ${VOLUMES_DRIVER}
+#    driver: local
+
+volumes:
+  kanasaivol2:
+    external: true
+    #driver: rexray/s3fs:0.11.1
+
+services:
+
+
+### PHP-FPM ##############################################
+    php-fpm:
+      #build:
+      #  context: ./php-fpm
+      #  args:
+      #    - PHP_VERSION=${PHP_VERSION}
+      #    - INSTALL_XDEBUG=${PHP_FPM_INSTALL_XDEBUG}
+      #    - INSTALL_BLACKFIRE=${INSTALL_BLACKFIRE}
+      #    - INSTALL_SOAP=${PHP_FPM_INSTALL_SOAP}
+      #    - INSTALL_IMAP=${PHP_FPM_INSTALL_IMAP}
+      #    - INSTALL_MONGO=${PHP_FPM_INSTALL_MONGO}
+      #    - INSTALL_AMQP=${PHP_FPM_INSTALL_AMQP}
+      #    - INSTALL_MSSQL=${PHP_FPM_INSTALL_MSSQL}
+      #    - INSTALL_ZIP_ARCHIVE=${PHP_FPM_INSTALL_ZIP_ARCHIVE}
+      #    - INSTALL_BCMATH=${PHP_FPM_INSTALL_BCMATH}
+      #    - INSTALL_GMP=${PHP_FPM_INSTALL_GMP}
+      #    - INSTALL_PHPREDIS=${PHP_FPM_INSTALL_PHPREDIS}
+      #    - INSTALL_MEMCACHED=${PHP_FPM_INSTALL_MEMCACHED}
+      #    - INSTALL_OPCACHE=${PHP_FPM_INSTALL_OPCACHE}
+      #    - INSTALL_EXIF=${PHP_FPM_INSTALL_EXIF}
+      #    - INSTALL_AEROSPIKE=${PHP_FPM_INSTALL_AEROSPIKE}
+      #    - INSTALL_MYSQLI=${PHP_FPM_INSTALL_MYSQLI}
+      #    - INSTALL_PGSQL=${PHP_FPM_INSTALL_PGSQL}
+      #    - INSTALL_PG_CLIENT=${PHP_FPM_INSTALL_PG_CLIENT}
+      #    - INSTALL_TOKENIZER=${PHP_FPM_INSTALL_TOKENIZER}
+      #    - INSTALL_INTL=${PHP_FPM_INSTALL_INTL}
+      #    - INSTALL_GHOSTSCRIPT=${PHP_FPM_INSTALL_GHOSTSCRIPT}
+      #    - INSTALL_LDAP=${PHP_FPM_INSTALL_LDAP}
+      #    - INSTALL_SWOOLE=${PHP_FPM_INSTALL_SWOOLE}
+      #    - INSTALL_IMAGE_OPTIMIZERS=${PHP_FPM_INSTALL_IMAGE_OPTIMIZERS}
+      #    - INSTALL_IMAGEMAGICK=${PHP_FPM_INSTALL_IMAGEMAGICK}
+
+      env_file: .env
+      image: laradock_php-fpm:1
+      deploy:
+        replicas: 1
+        restart_policy:
+          condition: on-failure
+      volumes:
+        - ./php-fpm/php7.2.ini:/usr/local/etc/php/php.ini
+        - /home/patrick/mydocker/stack-proj/mystack-1/my-laravel-compose-1:/var/www/laravel:rw
+      expose:
+        - "9000"
+      extra_hosts:
+        - "dockerhost:127.0.0.1"
+      environment:
+        - PHP_IDE_CONFIG=laradock
+      networks:
+        - backend
+
+
+### NGINX Server #########################################
+    nginx:
+      #build:
+      #  context: ./nginx
+      #  args:
+      #    - PHP_UPSTREAM_CONTAINER=${NGINX_PHP_UPSTREAM_CONTAINER}
+      #    - PHP_UPSTREAM_PORT=${NGINX_PHP_UPSTREAM_PORT}
+
+      env_file: .env
+      image: laradock_nginx:1
+      deploy:
+        replicas: 1
+        restart_policy:
+          condition: on-failure
+      volumes:
+        - /home/patrick/mydocker/stack-proj/mystack-1/my-laravel-compose-1:/var/www/laravel:rw
+        - /home/patrick/mydocker/stack-proj/mystack-1/laradock/logs/nginx:/var/log/nginx
+        - /home/patrick/mydocker/stack-proj/mystack-1/laradock/nginx/sites:/etc/nginx/sites-available
+      ports:
+        - "80:80"
+        - "443:443"
+      depends_on:
+        - php-fpm
+      networks:
+        - frontend
+        - backend
+
+
+### MySQL ################################################
+    mysql:
+      image: mysql:5.7.21
+      deploy:
+        replicas: 1
+        restart_policy:
+          condition: on-failure
+      environment:
+        - MYSQL_DATABASE=homestead
+        - MYSQL_USER=patrick
+        - MYSQL_PASSWORD=secret
+        - MYSQL_ROOT_PASSWORD=secret
+      volumes: 
+        - kanasaivol2:/var/lib/mysql
+      ports:
+        - "3306:3306"
+      networks:
+        - backend
+
+
+### MySQL-ADMIN  ################################################
+#    mysqladmin:
+#      #build:
+#      #  context: ./mysql
+#      #  args:
+#      #    - MYSQL_VERSION=${MYSQL_VERSION}
+#
+#      #image: laradock_mysql:1
+#      image: mysql:5.7.21
+#      deploy:
+#        replicas: 1
+#        restart_policy:
+#          condition: on-failure
+#      environment:
+#        #- MYSQL_DATABASE=homestead
+#        - MYSQL_USER=patrick
+#        - MYSQL_PASSWORD=secret
+#        - MYSQL_ROOT_PASSWORD=secret
+#        #- TZ=UTC
+#      #volumes:
+#        #- mysql-kospen-data:/var/lib/mysql
+#        #- ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
+#      ports:
+#        - "3307:3306"
+#      networks:
+#        - backend
+
